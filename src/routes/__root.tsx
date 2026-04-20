@@ -32,11 +32,15 @@ export const Route = createRootRoute({
       { title: "OCP AI Monitoring — Industrial Intelligence Platform" },
       { name: "description", content: "Real-time AI monitoring, anomaly detection, and decision support for OCP Group industrial operations." },
       { name: "author", content: "OCP Group" },
-      { property: "og:title", content: "OCP AI Monitoring Platform" },
-      { property: "og:description", content: "Real-time industrial intelligence for OCP Group." },
+      { property: "og:title", content: "OCP AI Monitoring — Industrial Intelligence Platform" },
+      { property: "og:description", content: "Real-time AI monitoring, anomaly detection, and decision support for OCP Group industrial operations." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "OCP AI Monitoring — Industrial Intelligence Platform" },
+      { name: "twitter:description", content: "Real-time AI monitoring, anomaly detection, and decision support for OCP Group industrial operations." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/becde775-d200-48f0-9db5-40915e2d7c80" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/becde775-d200-48f0-9db5-40915e2d7c80" },
     ],
     links: [
       {
