@@ -25,7 +25,7 @@ interface ResultRow {
   statut: "conforme" | "alerte";
 }
 
-const API_URL = "http://localhost:5000/predict_stream";
+const API_URL = "https://gating-revoke-sliceable.ngrok-free.dev/predict_stream";
 const ACCEPTED = ".xlsx,.xls,.xlsm,.csv";
 
 function AnalysePage() {
