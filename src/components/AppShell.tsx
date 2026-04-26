@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
+  BarChart3,
   Bell,
   Lightbulb,
   Brain,
@@ -24,6 +25,7 @@ interface NavItem {
 
 const ALL_NAV: NavItem[] = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/app/analyse", label: "Analyse", icon: BarChart3 },
   { to: "/app/alerts", label: "Alerts", icon: Bell },
   { to: "/app/recommendations", label: "Recommendations", icon: Lightbulb },
   { to: "/app/explain", label: "AI Explanation", icon: Brain },

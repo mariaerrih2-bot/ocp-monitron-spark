@@ -18,6 +18,7 @@ import { Route as AppManagementRouteImport } from './routes/app.management'
 import { Route as AppFeedbackRouteImport } from './routes/app.feedback'
 import { Route as AppExplainRouteImport } from './routes/app.explain'
 import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
+import { Route as AppAnalyseRouteImport } from './routes/app.analyse'
 import { Route as AppAlertsRouteImport } from './routes/app.alerts'
 import { Route as AppAdminRouteImport } from './routes/app.admin'
 
@@ -66,6 +67,11 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAnalyseRoute = AppAnalyseRouteImport.update({
+  id: '/analyse',
+  path: '/analyse',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAlertsRoute = AppAlertsRouteImport.update({
   id: '/alerts',
   path: '/alerts',
@@ -83,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/app/admin': typeof AppAdminRoute
   '/app/alerts': typeof AppAlertsRoute
+  '/app/analyse': typeof AppAnalyseRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/explain': typeof AppExplainRoute
   '/app/feedback': typeof AppFeedbackRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/app/admin': typeof AppAdminRoute
   '/app/alerts': typeof AppAlertsRoute
+  '/app/analyse': typeof AppAnalyseRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/explain': typeof AppExplainRoute
   '/app/feedback': typeof AppFeedbackRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/app/admin': typeof AppAdminRoute
   '/app/alerts': typeof AppAlertsRoute
+  '/app/analyse': typeof AppAnalyseRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/explain': typeof AppExplainRoute
   '/app/feedback': typeof AppFeedbackRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/admin'
     | '/app/alerts'
+    | '/app/analyse'
     | '/app/dashboard'
     | '/app/explain'
     | '/app/feedback'
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/admin'
     | '/app/alerts'
+    | '/app/analyse'
     | '/app/dashboard'
     | '/app/explain'
     | '/app/feedback'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/admin'
     | '/app/alerts'
+    | '/app/analyse'
     | '/app/dashboard'
     | '/app/explain'
     | '/app/feedback'
@@ -230,6 +242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/analyse': {
+      id: '/app/analyse'
+      path: '/analyse'
+      fullPath: '/app/analyse'
+      preLoaderRoute: typeof AppAnalyseRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/alerts': {
       id: '/app/alerts'
       path: '/alerts'
@@ -250,6 +269,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRoute
   AppAlertsRoute: typeof AppAlertsRoute
+  AppAnalyseRoute: typeof AppAnalyseRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppExplainRoute: typeof AppExplainRoute
   AppFeedbackRoute: typeof AppFeedbackRoute
@@ -261,6 +281,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRoute,
   AppAlertsRoute: AppAlertsRoute,
+  AppAnalyseRoute: AppAnalyseRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppExplainRoute: AppExplainRoute,
   AppFeedbackRoute: AppFeedbackRoute,
@@ -279,3 +300,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
