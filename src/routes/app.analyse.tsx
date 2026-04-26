@@ -25,7 +25,7 @@ interface ResultRow {
   statut: "conforme" | "alerte";
 }
 
-const API_URL = "http://localhost:5000/predict_stream";
+const API_URL = "https://gating-revoke-sliceable.ngrok-free.dev/predict_stream";
 const ACCEPTED = ".xlsx,.xls,.xlsm,.csv";
 
 function AnalysePage() {
@@ -146,7 +146,7 @@ function AnalysePage() {
       console.error(err);
       setAnalysing(false);
       setError(
-        "Impossible de contacter l'API. Vérifiez que le serveur Python est lancé sur http://localhost:5000",
+        "Impossible de contacter l'API. Vérifiez que le serveur est accessible sur https://gating-revoke-sliceable.ngrok-free.dev",
       );
     }
   };
