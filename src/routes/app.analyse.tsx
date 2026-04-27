@@ -83,6 +83,11 @@ function AnalysePage() {
       const response = await fetch(API_URL, {
         method: "POST",
         body: formData,
+        headers: {
+          // Bypass ngrok browser warning page so we receive the SSE stream directly
+          "ngrok-skip-browser-warning": "true",
+          Accept: "text/event-stream",
+        },
       });
 
       if (!response.ok || !response.body) {
