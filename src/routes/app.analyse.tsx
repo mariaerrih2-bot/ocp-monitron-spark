@@ -122,51 +122,84 @@ function AnalysePage() {
       const decoder = new TextDecoder();
       let buffer = "";
 
+      const applyStreamMessage = (json: Record<string, unknown>) => {
+        if (json.type === "progress") {
+          setProgress(Number(json.pct) || 0);
+          setProgressLabel(
+            `Analyse ligne ${json.ligne ?? "—"} sur ${json.total ?? "—"}`,
+          );
+          return;
+        }
+
+        if (json.type === "result") {
+          const row: ResultRow = {
+            ligne: Number(json.ligne) || 0,
+            prediction: String(json.prediction ?? "—"),
+            confiance: Number(json.confiance) || 0,
+            statut: json.statut === "conforme" ? "conforme" : "alerte",
+          };
+          setResultats((prev) => [...prev, row]);
+          if (row.statut === "conforme") {
+            setNbConformes((p) => p + 1);
+          } else {
+            setNbAlertes((p) => p + 1);
+          }
+          return;
+        }
+
+        if (json.type === "done") {
+          setAnalysing(false);
+          setProgress(100);
+          setDone(true);
+        }
+      };
+
+      const processSseLine = (rawLine: string) => {
+        const line = rawLine.trim();
+        if (!line || line.startsWith(":")) return;
+        if (
+          line.startsWith("event:") ||
+          line.startsWith("id:") ||
+          line.startsWith("retry:")
+        ) {
+          return;
+        }
+
+        const payload = line.startsWith("data:")
+          ? line.replace(/^data:\s*/, "")
+          : line.startsWith("{")
+            ? line
+            : "";
+
+        if (!payload) return;
+        if (payload === "[DONE]") {
+          applyStreamMessage({ type: "done" });
+          return;
+        }
+
+        try {
+          applyStreamMessage(JSON.parse(payload) as Record<string, unknown>);
+        } catch (parseError) {
+          console.warn("Ligne SSE ignorée", payload, parseError);
+        }
+      };
+
       while (true) {
         const { done: streamDone, value } = await reader.read();
         if (streamDone) break;
 
         buffer += decoder.decode(value, { stream: true });
-        const parts = buffer.split("\n");
-        buffer = parts.pop() ?? "";
+        const lines = buffer.split(/\r?\n/);
+        buffer = lines.pop() ?? "";
 
-        for (const raw of parts) {
-          const line = raw.trim();
-          if (!line.startsWith("data:")) continue;
-          const payload = line.replace(/^data:\s*/, "");
-          if (!payload) continue;
-
-          try {
-            const json = JSON.parse(payload);
-
-            if (json.type === "progress") {
-              setProgress(Number(json.pct) || 0);
-              setProgressLabel(
-                `Analyse ligne ${json.ligne} sur ${json.total}`,
-              );
-            } else if (json.type === "result") {
-              const row: ResultRow = {
-                ligne: json.ligne,
-                prediction: String(json.prediction ?? "—"),
-                confiance: Number(json.confiance) || 0,
-                statut: json.statut === "conforme" ? "conforme" : "alerte",
-              };
-              setResultats((prev) => [...prev, row]);
-              if (row.statut === "conforme") {
-                setNbConformes((p) => p + 1);
-              } else {
-                setNbAlertes((p) => p + 1);
-              }
-            } else if (json.type === "done") {
-              setAnalysing(false);
-              setProgress(100);
-              setDone(true);
-            }
-          } catch {
-            // ignore malformed chunk
-          }
+        for (const line of lines) {
+          processSseLine(line);
         }
       }
+
+      const finalChunk = decoder.decode();
+      if (finalChunk) buffer += finalChunk;
+      if (buffer.trim()) processSseLine(buffer);
 
       setAnalysing(false);
       setDone(true);
