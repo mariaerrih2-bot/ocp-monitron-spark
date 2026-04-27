@@ -73,23 +73,45 @@ function AnalysePage() {
     if (f) handleFile(f);
   };
 
+  const parseFileToRows = async (f: File): Promise<Record<string, unknown>[]> => {
+    const name = f.name.toLowerCase();
+    if (name.endsWith(".csv")) {
+      const text = await f.text();
+      const parsed = Papa.parse<Record<string, unknown>>(text, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+      });
+      return parsed.data;
+    }
+    // Excel (.xlsx / .xls / .xlsm)
+    const buf = await f.arrayBuffer();
+    const wb = XLSX.read(buf, { type: "array" });
+    const firstSheet = wb.Sheets[wb.SheetNames[0]];
+    return XLSX.utils.sheet_to_json<Record<string, unknown>>(firstSheet, {
+      defval: null,
+    });
+  };
+
   const handleAnalyse = async () => {
     if (!file) return;
     resetResults();
     setAnalysing(true);
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
+      const rows = await parseFileToRows(file);
+
       const response = await fetch(API_URL, {
         method: "POST",
-        body: formData,
         headers: {
-          // Bypass ngrok browser warning page so we receive the SSE stream directly
+          "Content-Type": "application/json",
           "ngrok-skip-browser-warning": "true",
           Accept: "text/event-stream",
         },
+        body: JSON.stringify({
+          filename: file.name,
+          rows,
+        }),
       });
 
       if (!response.ok || !response.body) {
