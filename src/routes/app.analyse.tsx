@@ -13,6 +13,8 @@ import {
 import { PageHeader } from "@/components/ui-bits";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import Papa from "papaparse";
+import * as XLSX from "xlsx";
 
 export const Route = createFileRoute("/app/analyse")({
   component: AnalysePage,
