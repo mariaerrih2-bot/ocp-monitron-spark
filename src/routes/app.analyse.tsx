@@ -101,17 +101,13 @@ function AnalysePage() {
     try {
       const rows = await parseFileToRows(file);
 
-      const response = await fetch(API_URL, {
+      const response = await fetch("https://gating-revoke-sliceable.ngrok-free.dev/predict_stream", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           "ngrok-skip-browser-warning": "true",
-          Accept: "text/event-stream",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          filename: file.name,
-          rows,
-        }),
+        body: JSON.stringify({ rows })
       });
 
       if (!response.ok || !response.body) {
