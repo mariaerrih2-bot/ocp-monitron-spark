@@ -27,7 +27,6 @@ interface NavItem {
 const ALL_NAV: NavItem[] = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/app/analyse", label: "Analyse", icon: BarChart3 },
-  { to: "/app/nettoyage", label: "Nettoyage", icon: Sparkles },
   { to: "/app/alerts", label: "Alerts", icon: Bell },
   { to: "/app/recommendations", label: "Recommendations", icon: Lightbulb },
   { to: "/app/explain", label: "AI Explanation", icon: Brain },
