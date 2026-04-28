@@ -101,7 +101,21 @@ function AnalysePage() {
     setAnalysing(true);
 
     try {
-      const rows = await parseFileToRows(file);
+      const rawRows = await parseFileToRows(file);
+
+      // Nettoyage : retirer les colonnes __EMPTY_* et limiter à 100 lignes
+      const cleanedRows = rawRows
+        .slice(0, 100)
+        .map((row) => {
+          const cleaned: Record<string, unknown> = {};
+          for (const [key, value] of Object.entries(row)) {
+            if (key.startsWith("__EMPTY")) continue;
+            cleaned[key] = value;
+          }
+          return cleaned;
+        });
+
+      const rows = cleanedRows;
 
       const response = await fetch("https://gating-revoke-sliceable.ngrok-free.dev/predict_stream", {
         method: "POST",
