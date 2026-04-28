@@ -9,6 +9,8 @@ import {
   Sparkles,
   RefreshCw,
   ArrowRight,
+  Database,
+  FileText,
 } from "lucide-react";
 import { PageHeader } from "@/components/ui-bits";
 import { Button } from "@/components/ui/button";
@@ -271,6 +273,97 @@ function AnalysePage() {
           )}
         </div>
       </div>
+
+      {/* Rapport de nettoyage des données */}
+      <section className="mt-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Sparkles className="w-4 h-4 text-info" />
+          <h2 className="text-sm font-semibold tracking-tight">
+            Rapport de nettoyage des données
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {/* CSV PI */}
+          <div className="bg-card border border-border rounded-xl p-4 shadow-[var(--shadow-card)]">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-9 h-9 rounded-md bg-info/10 text-info flex items-center justify-center">
+                <FileSpreadsheet className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="text-sm font-semibold">CSV PI</div>
+                <div className="text-[11px] text-muted-foreground">
+                  Capteurs / mesures
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-sm mb-3">
+              <div>
+                <div className="text-[11px] text-muted-foreground">Initial</div>
+                <div className="font-semibold tabular-nums">1 713 767</div>
+              </div>
+              <div>
+                <div className="text-[11px] text-muted-foreground">Propres</div>
+                <div className="font-semibold tabular-nums">652 051</div>
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[11px] mb-1">
+              <span className="text-muted-foreground">Nettoyé</span>
+              <span className="font-medium">62%</span>
+            </div>
+            <Progress value={62} />
+          </div>
+
+          {/* DATA3 Laboratoire */}
+          <div className="bg-card border border-border rounded-xl p-4 shadow-[var(--shadow-card)]">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-9 h-9 rounded-md bg-success/10 text-success flex items-center justify-center">
+                <Database className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="text-sm font-semibold">DATA3 Laboratoire</div>
+                <div className="text-[11px] text-muted-foreground">
+                  Dataset agrégé
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <div>
+                <div className="text-[11px] text-muted-foreground">Lignes</div>
+                <div className="text-2xl font-semibold tabular-nums">339</div>
+              </div>
+              <div>
+                <div className="text-[11px] text-muted-foreground">Colonnes</div>
+                <div className="text-2xl font-semibold tabular-nums">26</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Synthèse DEF */}
+          <div className="bg-card border border-border rounded-xl p-4 shadow-[var(--shadow-card)]">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-9 h-9 rounded-md bg-warning/15 text-warning-foreground flex items-center justify-center">
+                <FileText className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="text-sm font-semibold">Synthèse DEF</div>
+                <div className="text-[11px] text-muted-foreground">
+                  Dataset final
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <div>
+                <div className="text-[11px] text-muted-foreground">Lignes</div>
+                <div className="text-2xl font-semibold tabular-nums">53</div>
+              </div>
+              <div>
+                <div className="text-[11px] text-muted-foreground">Colonnes</div>
+                <div className="text-2xl font-semibold tabular-nums">26</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Action button */}
       <div className="mt-4">
