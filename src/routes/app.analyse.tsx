@@ -29,7 +29,7 @@ interface ResultRow {
   statut: "conforme" | "alerte";
 }
 
-const API_URL = "https://gating-revoke-sliceable.ngrok-free.dev/predict_stream";
+const API_URL = "http://localhost:8000/api/v1/predictions/predict";
 const ACCEPTED = ".xlsx,.xls,.xlsm,.csv";
 
 function AnalysePage() {
@@ -117,11 +117,11 @@ function AnalysePage() {
 
       const rows = cleanedRows;
 
-      const response = await fetch("https://gating-revoke-sliceable.ngrok-free.dev/predict_stream", {
+      const response = await fetch("http://localhost:8000/api/v1/predictions/predict", {
         method: "POST",
         headers: {
-          "ngrok-skip-browser-warning": "true",
-          "Content-Type": "application/json"
+          
+        "Content-Type": "application/json"
         },
         body: JSON.stringify({ rows })
       });
