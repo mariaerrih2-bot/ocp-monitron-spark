@@ -29,7 +29,7 @@ interface ResultRow {
   statut: "conforme" | "alerte";
 }
 
-const API_URL = "http://localhost:8000/api/v1/predictions/predict";
+const API_URL = "https://ocp-tsp-intelligence-platform-2026-production.up.railway.app/api/v1/predictions/predict";
 const ACCEPTED = ".xlsx,.xls,.xlsm,.csv";
 
 function AnalysePage() {
@@ -117,7 +117,7 @@ function AnalysePage() {
 
       const rows = cleanedRows;
 
-      const response = await fetch("http://localhost:8000/api/v1/predictions/predict", {
+      const response = await fetch("https://ocp-tsp-intelligence-platform-2026-production.up.railway.app/api/v1/predictions/predict", {
         method: "POST",
         headers: {
           
