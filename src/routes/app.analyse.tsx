@@ -139,10 +139,19 @@ function AnalysePage() {
 
       });
 
-      if (!response.ok || !response.body) {
+      if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
-
+const data = await response.json();
+      const p2o5 = data.p2o5_predicted ?? 0;
+      const statut: "conforme" | "alerte" = (p2o5 >= 28 && p2o5 <= 32) ? "conforme" : "alerte";
+      const row = { ligne: 1, prediction: `P2O5: ${p2o5.toFixed(2)}%`, confiance: data.confidence ?? 0.85, statut };
+      setResultats([row]);
+      if (statut === "conforme") setConformes(1); else setAlertes(1);
+      setProgress(100);
+      setDone(true);
+      setAnalysing(false);
+      return;
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
