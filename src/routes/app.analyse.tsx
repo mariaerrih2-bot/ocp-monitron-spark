@@ -135,6 +135,7 @@ function AnalysePage() {
     ratio_ss: Number(rows[0]?.ratio_ss ?? 0.95),
   },
   explain: true
+})
 
       });
 
