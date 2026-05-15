@@ -147,7 +147,7 @@ const data = await response.json();
       const statut: "conforme" | "alerte" = (p2o5 >= 28 && p2o5 <= 32) ? "conforme" : "alerte";
       const row = { ligne: 1, prediction: `P2O5: ${p2o5.toFixed(2)}%`, confiance: data.confidence ?? 0.85, statut };
       setResultats([row]);
-      if (statut === "conforme") setConformes(1); else setAlertes(1);
+      if (statut === "conforme") setNbConformes(1); else setNbAlertes(1);;
       setProgress(100);
       setDone(true);
       setAnalysing(false);
