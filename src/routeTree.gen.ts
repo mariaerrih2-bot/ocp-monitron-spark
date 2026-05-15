@@ -13,6 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRecommendationsRouteImport } from './routes/app.recommendations'
+import { Route as AppProcessKnowledgeRouteImport } from './routes/app.process-knowledge'
 import { Route as AppMonitoringRouteImport } from './routes/app.monitoring'
 import { Route as AppManagementRouteImport } from './routes/app.management'
 import { Route as AppFeedbackRouteImport } from './routes/app.feedback'
@@ -40,6 +41,11 @@ const IndexRoute = IndexRouteImport.update({
 const AppRecommendationsRoute = AppRecommendationsRouteImport.update({
   id: '/recommendations',
   path: '/recommendations',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProcessKnowledgeRoute = AppProcessKnowledgeRouteImport.update({
+  id: '/process-knowledge',
+  path: '/process-knowledge',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMonitoringRoute = AppMonitoringRouteImport.update({
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/app/feedback': typeof AppFeedbackRoute
   '/app/management': typeof AppManagementRoute
   '/app/monitoring': typeof AppMonitoringRoute
+  '/app/process-knowledge': typeof AppProcessKnowledgeRoute
   '/app/recommendations': typeof AppRecommendationsRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/app/feedback': typeof AppFeedbackRoute
   '/app/management': typeof AppManagementRoute
   '/app/monitoring': typeof AppMonitoringRoute
+  '/app/process-knowledge': typeof AppProcessKnowledgeRoute
   '/app/recommendations': typeof AppRecommendationsRoute
 }
 export interface FileRoutesById {
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/app/feedback': typeof AppFeedbackRoute
   '/app/management': typeof AppManagementRoute
   '/app/monitoring': typeof AppMonitoringRoute
+  '/app/process-knowledge': typeof AppProcessKnowledgeRoute
   '/app/recommendations': typeof AppRecommendationsRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/app/feedback'
     | '/app/management'
     | '/app/monitoring'
+    | '/app/process-knowledge'
     | '/app/recommendations'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/app/feedback'
     | '/app/management'
     | '/app/monitoring'
+    | '/app/process-knowledge'
     | '/app/recommendations'
   id:
     | '__root__'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/app/feedback'
     | '/app/management'
     | '/app/monitoring'
+    | '/app/process-knowledge'
     | '/app/recommendations'
   fileRoutesById: FileRoutesById
 }
@@ -205,6 +217,13 @@ declare module '@tanstack/react-router' {
       path: '/recommendations'
       fullPath: '/app/recommendations'
       preLoaderRoute: typeof AppRecommendationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/process-knowledge': {
+      id: '/app/process-knowledge'
+      path: '/process-knowledge'
+      fullPath: '/app/process-knowledge'
+      preLoaderRoute: typeof AppProcessKnowledgeRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/monitoring': {
@@ -275,6 +294,7 @@ interface AppRouteChildren {
   AppFeedbackRoute: typeof AppFeedbackRoute
   AppManagementRoute: typeof AppManagementRoute
   AppMonitoringRoute: typeof AppMonitoringRoute
+  AppProcessKnowledgeRoute: typeof AppProcessKnowledgeRoute
   AppRecommendationsRoute: typeof AppRecommendationsRoute
 }
 
@@ -287,6 +307,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFeedbackRoute: AppFeedbackRoute,
   AppManagementRoute: AppManagementRoute,
   AppMonitoringRoute: AppMonitoringRoute,
+  AppProcessKnowledgeRoute: AppProcessKnowledgeRoute,
   AppRecommendationsRoute: AppRecommendationsRoute,
 }
 
