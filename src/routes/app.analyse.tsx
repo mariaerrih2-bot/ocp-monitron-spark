@@ -125,6 +125,18 @@ function AnalysePage() {
         },
         body: JSON.stringify({
   sensor_data: {
+    temperature_reaction: Number(rows[0]?.temperature_reaction ?? 90.0),
+    pression_filtre: Number(rows[0]?.pression_filtre ?? 3.5),
+    debit_acide: Number(rows[0]?.debit_acide ?? 16.0),
+    debit_phosphate: Number(rows[0]?.debit_phosphate ?? 30.0),
+    temperature_sechage: Number(rows[0]?.temperature_sechage ?? 450.0),
+    humidite_entree: Number(rows[0]?.humidite_entree ?? 4.0),
+    granulometrie_d50: Number(rows[0]?.granulometrie_d50 ?? 3.5),
+    ratio_ss: Number(rows[0]?.ratio_ss ?? 0.95),
+  },
+  explain: true
+})
+  sensor_data: {
     temperature_reaction: Number(rows[0]?.temperature_reaction ?? rows[0]?.Temperature ?? 75.5),
     pression_filtre: Number(rows[0]?.pression_filtre ?? rows[0]?.Pression ?? 3.2),
     debit_acide: Number(rows[0]?.debit_acide ?? rows[0]?.Debit_acide ?? 45.0),
