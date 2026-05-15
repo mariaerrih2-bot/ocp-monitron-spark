@@ -220,7 +220,7 @@ function AnalysePage() {
       console.error(err);
       setAnalysing(false);
       setError(
-        "Impossible de contacter l'API. Vérifiez que le serveur est accessible sur https://gating-revoke-sliceable.ngrok-free.dev",
+        "Impossible de contacter l'API. Vérifiez que le serveur est accessible sur https://ocp-tsp-intelligence-platform-2026-production.up.railway.app",
       );
     }
   };
