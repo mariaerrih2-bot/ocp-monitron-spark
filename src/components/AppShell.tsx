@@ -140,7 +140,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="text-sm text-muted-foreground">Live · OCP Khouribga site</span>
           </div>
           <div className="ml-auto flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="hidden sm:inline">v1.0 · build 2025.04.19</span>
+            <span className="hidden sm:inline">v2.0 · build 2026.05.16</span>
           </div>
         </header>
 
