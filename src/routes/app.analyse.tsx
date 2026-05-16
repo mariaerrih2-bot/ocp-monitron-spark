@@ -146,7 +146,15 @@ const data = await response.json();
       const p2o5 = data.p2o5_predicted ?? 0;
       const statut: "conforme" | "alerte" = (p2o5 >= 28 && p2o5 <= 32) ? "conforme" : "alerte";
       const row = { ligne: 1, prediction: `P2O5: ${p2o5.toFixed(2)}%`, confiance: data.confidence ?? 0.85, statut };
-      setResultats([row]);
+      setResultats([row]);localStorage.setItem("last_analysis", JSON.stringify({
+  p2o5: p2o5,
+  so4: data.so4_predicted ?? 0,
+  fluorures: data.fluorures_predicted ?? 0,
+  mgo: data.mgo_predicted ?? 0,
+  confiance: data.confidence ?? 0.85,
+  statut: statut,
+  timestamp: new Date().toISOString()
+}));
       if (statut === "conforme") setNbConformes(1); else setNbAlertes(1);;
       setProgress(100);
       setDone(true);
