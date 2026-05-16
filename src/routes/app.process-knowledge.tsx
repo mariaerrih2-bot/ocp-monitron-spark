@@ -53,8 +53,8 @@ function ProcessKnowledgePage() {
     <div className="p-6 max-w-5xl mx-auto">
       <div className="mb-6 flex justify-between items-center flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Procede TSP — Ligne 107 DEF</h1>
-          <p className="text-gray-500">OCP Khouribga · Surveillance temps reel</p>
+          <h1 className="text-2xl font-bold text-gray-900">Procede TSP ï¿½ Ligne 107 DEF</h1>
+          <p className="text-gray-500">OCP Khouribga ï¿½ Surveillance temps reel</p>
         </div>
         <div className="flex gap-3 items-center">
           {nbAlertes > 0 && <span className="bg-red-100 text-red-700 text-sm px-3 py-1 rounded-full font-semibold">? {nbAlertes} hors borne</span>}
@@ -106,19 +106,18 @@ function ProcessKnowledgePage() {
                         <span className={"font-bold text-sm " + (ok ? "text-green-700" : "text-red-700")}>{val} {p.unite}</span>
                         <span className={"text-xs px-2 py-0.5 rounded-full " + (ok ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700")}>{ok ? "OK" : "Alerte"}</span>
                       </div>
-                    : <span className="text-gray-400 text-sm">— reseau OCP</span>}
-              </div>
+                    : <span className="text-gray-400 text-sm">({p.min}â€“{p.max} {p.unite})</span>}
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div className={"h-2 rounded-full " + (ok ? "bg-green-500" : "bg-red-500")} style={{width: pct + "%"}} />
               </div>
-              <p className="text-xs text-gray-400 mt-1">Bornes : {p.min} – {p.max} {p.unite}</p>
+              <p className="text-xs text-gray-400 mt-1">Bornes : {p.min} ï¿½ {p.max} {p.unite}</p>
             </div>
           );
         })}
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b"><h2 className="font-bold text-gray-900">Specifications Qualite TSP — OCP</h2></div>
+        <div className="p-4 border-b"><h2 className="font-bold text-gray-900">Specifications Qualite TSP ï¿½ OCP</h2></div>
         <table className="w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
