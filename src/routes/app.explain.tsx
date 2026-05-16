@@ -1,8 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { FEATURE_IMPORTANCE } from "@/lib/mock-data";
-import { PageHeader } from "@/components/ui-bits";
-import { Brain, Lightbulb, AlertTriangle } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/app/explain")({
   head: () => ({ meta: [{ title: "AI Explanation — OCP AI Monitor" }] }),
@@ -10,110 +7,75 @@ export const Route = createFileRoute("/app/explain")({
 });
 
 function ExplainPage() {
+  const [lastAnalysis, setLastAnalysis] = useState<any>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("last_analysis");
+    if (saved) setLastAnalysis(JSON.parse(saved));
+  }, []);
+
+  const shapData = [
+    { feature: "Temperature reaction", value: 32, impact: "positif", explication: "La temperature elevee favorise la reaction chimique et ameliore la qualite P2O5", icone: "🌡️", conseil: "Maintenir entre 90-100°C" },
+    { feature: "Ratio acide/phosphate", value: 28, impact: "positif", explication: "Un bon ratio assure une conversion complete du phosphate en P2O5 assimilable", icone: "⚗️", conseil: "Maintenir entre 0.85-1.05" },
+    { feature: "Humidite produit", value: 16, impact: "negatif", explication: "Une humidite elevee reduit la concentration P2O5 et cause des problemes de stockage", icone: "💧", conseil: "Maintenir sous 5%" },
+    { feature: "Debit acide H3PO4", value: 11, impact: "positif", explication: "Un debit optimal garantit une alimentation constante du reacteur", icone: "🔄", conseil: "Maintenir entre 8-25 m3/h" },
+    { feature: "Concentration H3PO4", value: 7, impact: "positif", explication: "Une concentration elevee ameliore le rendement de la reaction", icone: "🧪", conseil: "Maintenir entre 40-54% P2O5" },
+    { feature: "Granulometrie D50", value: 4, impact: "neutre", explication: "La taille des granules influe sur la surface de contact et la vitesse de reaction", icone: "⚖️", conseil: "Maintenir entre 2-5 mm" },
+  ];
+
   return (
-    <div>
-      <PageHeader
-        title="AI explanation"
-        subtitle="Understand how the model reached its conclusion for ALR-2041 / Reactor R-204"
-      />
-
-      <div className="grid lg:grid-cols-3 gap-4 mb-4">
-        <div className="lg:col-span-2 bg-card border border-border rounded-xl p-5 shadow-[var(--shadow-card)]">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-sm font-semibold">Feature importance (SHAP)</h3>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Contribution of each input variable to the anomaly score
-              </p>
-            </div>
-            <span className="text-xs text-muted-foreground">Model v3.2</span>
-          </div>
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={FEATURE_IMPORTANCE} layout="vertical" margin={{ left: 16 }}>
-              <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" horizontal={false} />
-              <XAxis type="number" stroke="var(--muted-foreground)" fontSize={11} />
-              <YAxis dataKey="feature" type="category" stroke="var(--muted-foreground)" fontSize={11} width={140} />
-              <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
-              <Bar dataKey="value" radius={[0, 6, 6, 0]}>
-                {FEATURE_IMPORTANCE.map((_, i) => (
-                  <Cell key={i} fill={i === 0 ? "var(--destructive)" : i < 3 ? "var(--chart-3)" : "var(--chart-1)"} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-5 shadow-[var(--shadow-card)]">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary grid place-items-center">
-              <Lightbulb className="w-4 h-4" />
-            </div>
-            <h3 className="text-sm font-semibold">In simple terms</h3>
-          </div>
-          <p className="text-sm text-foreground leading-relaxed">
-            The reactor is overheating mainly because the <strong>inlet temperature</strong> rose
-            sharply and the <strong>cooling water flow</strong> can't keep up. This pattern matches
-            past incidents that led to emergency shutdowns within 15–20 minutes.
-          </p>
-          <div className="mt-4 pt-4 border-t border-border">
-            <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
-              Recommended action
-            </div>
-            <p className="text-sm">Reduce setpoint by 4 °C — confidence 92%.</p>
-          </div>
-        </div>
+    <div className="p-6 max-w-5xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Explication IA — Ligne 107 DEF</h1>
+        <p className="text-gray-500 mt-2">Pourquoi le modele a predit ce resultat ? Explications pour operateurs</p>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-4">
-        <div className="bg-card border border-border rounded-xl p-5 shadow-[var(--shadow-card)]">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-destructive/10 text-destructive grid place-items-center">
-              <AlertTriangle className="w-4 h-4" />
+      {lastAnalysis && (
+        <div className={"mb-6 p-5 rounded-xl border " + (lastAnalysis.statut === "conforme" ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200")}>
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">{lastAnalysis.statut === "conforme" ? "✅" : "⚠️"}</span>
+            <div>
+              <h2 className="font-bold text-lg">Derniere prediction : P2O5 = {lastAnalysis.p2o5.toFixed(2)}%</h2>
+              <p className="text-sm">Statut : {lastAnalysis.statut.toUpperCase()} — Confiance : {(lastAnalysis.confiance * 100).toFixed(0)}%</p>
             </div>
-            <h3 className="text-sm font-semibold">Root cause</h3>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Cooling capacity saturation under elevated feed temperature. Likely external trigger:
-            ambient temperature spike + reduced cooling tower performance.
-          </p>
         </div>
+      )}
 
-        <div className="bg-card border border-border rounded-xl p-5 shadow-[var(--shadow-card)]">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-info/10 text-info grid place-items-center">
-              <Brain className="w-4 h-4" />
-            </div>
-            <h3 className="text-sm font-semibold">Model context</h3>
-          </div>
-          <ul className="text-sm space-y-1.5 text-muted-foreground">
-            <li>Trained on 2.4M plant events</li>
-            <li>AUC 0.94 on holdout set</li>
-            <li>Last retrained 3 days ago</li>
-          </ul>
-        </div>
+      <div className="mb-8 p-5 bg-blue-50 border border-blue-200 rounded-xl">
+        <h2 className="font-bold text-blue-900 mb-2">📊 Comment lire ce tableau ?</h2>
+        <p className="text-sm text-blue-800">Chaque variable ci-dessous a contribue a la prediction. Plus la barre est longue, plus cette variable a eu d influence. Vert = ameliore la qualite, Rouge = reduit la qualite.</p>
+      </div>
 
-        <div className="bg-card border border-border rounded-xl p-5 shadow-[var(--shadow-card)]">
-          <h3 className="text-sm font-semibold mb-3">Historical analogs</h3>
-          <ul className="text-sm space-y-2">
-            {[
-              { id: "INC-2024-08-11", outcome: "Resolved by setpoint reduction", success: true },
-              { id: "INC-2024-03-22", outcome: "Resolved by manual cooling boost", success: true },
-              { id: "INC-2023-11-04", outcome: "Led to 4h shutdown", success: false },
-            ].map((h) => (
-              <li key={h.id} className="flex items-start gap-2">
-                <span
-                  className={`mt-1 w-1.5 h-1.5 rounded-full shrink-0 ${
-                    h.success ? "bg-success" : "bg-destructive"
-                  }`}
-                />
-                <div>
-                  <div className="font-mono text-xs">{h.id}</div>
-                  <div className="text-xs text-muted-foreground">{h.outcome}</div>
+      <div className="space-y-4 mb-8">
+        {shapData.map((item, i) => (
+          <div key={i} className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="flex items-start gap-4">
+              <span className="text-2xl">{item.icone}</span>
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-semibold text-gray-900">{item.feature}</h3>
+                  <span className={"text-xs px-2 py-1 rounded-full font-medium " + (item.impact === "positif" ? "bg-green-100 text-green-700" : item.impact === "negatif" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-700")}>
+                    {item.impact === "positif" ? "↑ Ameliore la qualite" : item.impact === "negatif" ? "↓ Reduit la qualite" : "→ Effet neutre"}
+                  </span>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+                <div className="w-full bg-gray-100 rounded-full h-3 mb-3">
+                  <div className={"h-3 rounded-full " + (item.impact === "positif" ? "bg-green-500" : item.impact === "negatif" ? "bg-red-500" : "bg-gray-400")} style={{width: item.value + "%"}}></div>
+                </div>
+                <p className="text-sm text-gray-600 mb-2">{item.explication}</p>
+                <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2">
+                  <span className="text-yellow-600">💡</span>
+                  <p className="text-xs text-yellow-800 font-medium">Conseil : {item.conseil}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-gray-50 rounded-xl border border-gray-200 p-5">
+        <h2 className="font-bold text-gray-900 mb-3">🎯 Conclusion pour l operateur</h2>
+        <p className="text-sm text-gray-700">Le facteur le plus important est la <strong>temperature de reaction</strong> (32%), suivie du <strong>ratio acide/phosphate</strong> (28%). Concentrez-vous sur ces deux parametres pour ameliorer la qualite TSP.</p>
       </div>
     </div>
   );
