@@ -1,10 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/app/process-knowledge")({
   component: ProcessKnowledgePage,
 });
 
 function ProcessKnowledgePage() {
+  const [lastAnalysis, setLastAnalysis] = useState<any>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("last_analysis");
+    if (saved) setLastAnalysis(JSON.parse(saved));
+  }, []);
+
   const etapes = [
     {
       id: 1,
@@ -126,6 +134,30 @@ function ProcessKnowledgePage() {
           </div>
         ))}
       </div>
+      {lastAnalysis && (
+        <div className="mb-6 p-5 bg-green-50 border border-green-200 rounded-xl">
+          <h2 className="font-bold text-green-800 text-lg mb-3">Derniere Analyse — Resultats Reels</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+              <p className="text-xs text-gray-500">P2O5 Predit</p>
+              <p className="text-2xl font-bold text-green-700">{lastAnalysis.p2o5.toFixed(2)}%</p>
+            </div>
+            <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+              <p className="text-xs text-gray-500">SO4 Residu</p>
+              <p className="text-2xl font-bold text-blue-700">{lastAnalysis.so4.toFixed(2)}%</p>
+            </div>
+            <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+              <p className="text-xs text-gray-500">Fluorures</p>
+              <p className="text-2xl font-bold text-orange-700">{lastAnalysis.fluorures.toFixed(2)}%</p>
+            </div>
+            <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+              <p className="text-xs text-gray-500">Statut</p>
+              <p className={"text-lg font-bold " + (lastAnalysis.statut === "conforme" ? "text-green-600" : "text-red-600")}>{lastAnalysis.statut.toUpperCase()}</p>
+            </div>
+          </div>
+          <p className="text-xs text-gray-400 mt-2">Analyse du {new Date(lastAnalysis.timestamp).toLocaleString()}</p>
+        </div>
+      )}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-5 border-b border-gray-100">
           <h2 className="font-bold text-gray-900 text-lg">Specifications Qualite TSP -- OCP</h2>
