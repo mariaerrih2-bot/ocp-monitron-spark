@@ -137,7 +137,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </button>
           <div className="flex items-center gap-2">
             <span className="status-dot inline-block w-2 h-2 rounded-full bg-success text-success" />
-            <span className="text-sm text-muted-foreground">Live · OCP Khouribga site</span>
+            <span className="text-sm text-muted-foreground">Live · OCP El Jadida site</span>
           </div>
           <div className="ml-auto flex items-center gap-3 text-xs text-muted-foreground">
             <span className="hidden sm:inline">v2.0 · build 2026.05.16</span>
