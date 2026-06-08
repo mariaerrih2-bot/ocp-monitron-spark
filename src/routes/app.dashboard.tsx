@@ -52,7 +52,7 @@ function DashboardPage() {
     <div>
       <PageHeader
         title="Tableau de bord opérationnel"
-        subtitle="Vue temps réel — Site Khouribga TSP"
+        subtitle="Vue temps réel — Site El Jadida TSP"
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
