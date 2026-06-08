@@ -92,7 +92,8 @@ function LoginPage() {
           </div>
 
           <div className="text-xs text-white/60">
-            © {new Date().getFullYear()} OCP Group · Khouribga · Jorf Lasfar · Benguerir
+                                                          
+            © {new Date().getFullYear()} OCP Group · El Jadida · Jorf Lasfar
           </div>
         </div>
       </div>
