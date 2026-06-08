@@ -25,18 +25,16 @@ interface NavItem {
 }
 
 const ALL_NAV: NavItem[] = [
-  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/app/dashboard", label: "Tableau de bord", icon: LayoutDashboard },
   { to: "/app/analyse", label: "Analyse", icon: BarChart3 },
-  { to: "/app/process-knowledge", label: "Procede TSP", icon: Activity },
-  { to: "/app/alerts", label: "Alerts", icon: Bell },
-  { to: "/app/recommendations", label: "Recommendations", icon: Lightbulb },
-  { to: "/app/explain", label: "AI Explanation", icon: Brain },
-  { to: "/app/monitoring", label: "Model monitoring", icon: Activity },
-  { to: "/app/admin", label: "System / Admin", icon: Server },
+  { to: "/app/alerts", label: "Alertes", icon: Bell },
+  { to: "/app/recommendations", label: "Recommandations", icon: Lightbulb },
+  { to: "/app/explain", label: "Explication IA", icon: Brain },
+  { to: "/app/monitoring", label: "Monitoring temps réel", icon: Activity },
+  { to: "/app/admin", label: "Système / Admin", icon: Server },
   { to: "/app/management", label: "Management", icon: TrendingUp },
-  { to: "/app/feedback", label: "Feedback", icon: MessageSquare },
+  { to: "/app/feedback", label: "Retour opérateur", icon: MessageSquare },
 ];
-
 export function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();

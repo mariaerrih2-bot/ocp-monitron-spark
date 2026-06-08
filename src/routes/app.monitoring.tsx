@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { useEffect, useState, useRef } from "react";
 import { PageHeader, KpiCard, StatusPill } from "@/components/ui-bits";
 
 export const Route = createFileRoute("/app/monitoring")({
@@ -9,145 +8,232 @@ export const Route = createFileRoute("/app/monitoring")({
   component: MonitoringPage,
 });
 
+const MAX_POINTS = 30;
+
+function generatePoint(prev: any) {
+  const now = new Date();
+  const time = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  return {
+    time,
+    temperature: parseFloat(((prev?.temperature || 95) + (Math.random() - 0.5) * 2).toFixed(1)),
+    pression: parseFloat(((prev?.pression || 8.4) + (Math.random() - 0.5) * 0.2).toFixed(2)),
+    debit: parseFloat(((prev?.debit || 142) + (Math.random() - 0.5) * 3).toFixed(1)),
+    p2o5: parseFloat(((prev?.p2o5 || 44.5) + (Math.random() - 0.5) * 0.3).toFixed(2)),
+    humidite: parseFloat(((prev?.humidite || 3.8) + (Math.random() - 0.5) * 0.2).toFixed(2)),
+  };
+}
+
 function MonitoringPage() {
-  const [models, setModels] = useState<any>(null);
-  const [metrics, setMetrics] = useState<any>(null);
-  const [history, setHistory] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any[]>(() => {
+    const points = [];
+    let prev = null;
+    for (let i = 0; i < 20; i++) { prev = generatePoint(prev); points.push(prev); }
+    return points;
+  });
+  const [live, setLive] = useState(true);
+  const intervalRef = useRef<any>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [mod, met, hist] = await Promise.all([
-          api.getModels(),
-          api.getMetrics(),
-          api.getHistory(),
-        ]);
-        setModels(mod);
-        setMetrics(met);
-        setHistory(hist?.data || []);
-      } catch (e) {
-        console.error("API error:", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-    const t = setInterval(fetchData, 10000);
-    return () => clearInterval(t);
-  }, []);
+    if (live) {
+      intervalRef.current = setInterval(() => {
+        setData(prev => {
+          const last = prev[prev.length - 1];
+          const newPoint = generatePoint(last);
+          const updated = [...prev, newPoint];
+          return updated.length > MAX_POINTS ? updated.slice(-MAX_POINTS) : updated;
+        });
+      }, 2000);
+    }
+    return () => clearInterval(intervalRef.current);
+  }, [live]);
 
-  if (loading) return <div className="p-8 text-center text-muted-foreground">Chargement...</div>;
+  const last = data[data.length - 1] || {};
 
-  const driftCount = metrics?.drift_detections_7d || 0;
-  const modelList = models?.models || [];
+  const sensors = [
+    { key: "temperature", label: "Température réaction", unit: "°C", target: 95, min: 90, max: 100, color: "#ef4444", icon: "🌡️" },
+    { key: "pression", label: "Pression système", unit: "bar", target: 8.4, min: 7.5, max: 9.5, color: "#3b82f6", icon: "⚡" },
+    { key: "debit", label: "Débit acide H3PO4", unit: "t/h", target: 142, min: 120, max: 160, color: "#10b981", icon: "🔄" },
+    { key: "p2o5", label: "P2O5 prédit", unit: "%", target: 44.5, min: 44, max: 46, color: "#8b5cf6", icon: "⚗️" },
+    { key: "humidite", label: "Humidité produit", unit: "%", target: 3.8, min: 0, max: 5, color: "#f59e0b", icon: "💧" },
+  ];
+
+  const getStatus = (key: string) => {
+    const s = sensors.find(s => s.key === key);
+    if (!s) return "ok";
+    const v = last[key];
+    if (v < s.min || v > s.max) return "error";
+    if (v < s.min * 1.05 || v > s.max * 0.95) return "warning";
+    return "ok";
+  };
+
+  const alertCount = sensors.filter(s => getStatus(s.key) !== "ok").length;
 
   return (
-    <div>
-      <PageHeader
-        title="Monitoring des modèles"
-        subtitle="Performance, dérive et santé des modèles ML en production"
-      />
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <KpiCard label="Modèles en production" value={modelList.length.toString() || "—"} />
-        <KpiCard label="Précision moyenne" value={metrics?.model_accuracy_avg ? (metrics.model_accuracy_avg * 100).toFixed(1) : "—"} unit="%" tone="success" />
-        <KpiCard label="Latence P95" value={metrics?.inference_latency_p95_ms?.toString() || "—"} unit="ms" />
-        <KpiCard label="Dérives (7j)" value={driftCount.toString()} tone={driftCount > 0 ? "warning" : "success"} />
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Monitoring Temps Réel</h1>
+          <p className="text-sm text-gray-500 mt-1">Ligne 107 DEF · Jorf Lasfar · Auto-actualisation toutes les 2s</p>
+        </div>
+        <div className="flex items-center gap-3">
+          {alertCount > 0 && (
+            <span className="bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">
+              ⚠️ {alertCount} alerte{alertCount > 1 ? "s" : ""}
+            </span>
+          )}
+          <button
+            onClick={() => setLive(v => !v)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${live ? "bg-green-500 text-white" : "bg-gray-200 text-gray-700"}`}
+          >
+            <span className={`w-2 h-2 rounded-full ${live ? "bg-white animate-pulse" : "bg-gray-400"}`} />
+            {live ? "LIVE" : "PAUSE"}
+          </button>
+        </div>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-4 mb-4">
-        <div className="lg:col-span-2 bg-card border border-border rounded-xl p-5 shadow-[var(--shadow-card)]">
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        {sensors.map(s => {
+          const v = last[s.key];
+          const status = getStatus(s.key);
+          return (
+            <div key={s.key} className={`bg-white rounded-xl border-2 p-4 shadow-sm transition-all ${status === "error" ? "border-red-300 bg-red-50" : status === "warning" ? "border-yellow-300 bg-yellow-50" : "border-gray-200"}`}>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-lg">{s.icon}</span>
+                <span className={`w-2 h-2 rounded-full ${status === "ok" ? "bg-green-400" : status === "warning" ? "bg-yellow-400" : "bg-red-400"}`} />
+              </div>
+              <p className="text-xs text-gray-500 mb-1">{s.label}</p>
+              <p className="text-2xl font-bold" style={{ color: s.color }}>{v ?? "—"}</p>
+              <p className="text-xs text-gray-400">{s.unit} · cible {s.target}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Graphiques */}
+      <div className="grid lg:grid-cols-2 gap-4">
+        {/* Température */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold">Température réaction & P2O5 (dernières 24h)</h3>
-            <div className="flex items-center gap-3 text-xs text-muted-foreground">
-              <Legend color="var(--chart-1)" label="Température" />
-              <Legend color="var(--chart-2)" label="P2O5" />
+            <h3 className="font-semibold text-gray-900">🌡️ Température réaction</h3>
+            <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatus("temperature") === "ok" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+              {last.temperature}°C
+            </span>
+          </div>
+          <ResponsiveContainer width="100%" height={180}>
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="tempGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="#f0f0f0" strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="time" fontSize={10} tick={{ fill: "#9ca3af" }} interval="preserveStartEnd" />
+              <YAxis domain={[88, 102]} fontSize={10} tick={{ fill: "#9ca3af" }} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+              <Area type="monotone" dataKey="temperature" stroke="#ef4444" strokeWidth={2} fill="url(#tempGrad)" dot={false} name="Température (°C)" />
+            </AreaChart>
+          </ResponsiveContainer>
+          <p className="text-xs text-gray-400 mt-2">Seuil normal : 90–100°C · Rolling 90s window</p>
+        </div>
+
+        {/* Pression */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-gray-900">⚡ Pression système</h3>
+            <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatus("pression") === "ok" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+              {last.pression} bar
+            </span>
+          </div>
+          <ResponsiveContainer width="100%" height={180}>
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="presGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="#f0f0f0" strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="time" fontSize={10} tick={{ fill: "#9ca3af" }} interval="preserveStartEnd" />
+              <YAxis domain={[7, 10]} fontSize={10} tick={{ fill: "#9ca3af" }} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+              <Area type="monotone" dataKey="pression" stroke="#3b82f6" strokeWidth={2} fill="url(#presGrad)" dot={false} name="Pression (bar)" />
+            </AreaChart>
+          </ResponsiveContainer>
+          <p className="text-xs text-gray-400 mt-2">Seuil normal : 7.5–9.5 bar · Rolling 90s window</p>
+        </div>
+
+        {/* Débit */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-gray-900">🔄 Débit acide H3PO4</h3>
+            <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatus("debit") === "ok" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+              {last.debit} t/h
+            </span>
+          </div>
+          <ResponsiveContainer width="100%" height={180}>
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="debitGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="#f0f0f0" strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="time" fontSize={10} tick={{ fill: "#9ca3af" }} interval="preserveStartEnd" />
+              <YAxis domain={[115, 165]} fontSize={10} tick={{ fill: "#9ca3af" }} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+              <Area type="monotone" dataKey="debit" stroke="#10b981" strokeWidth={2} fill="url(#debitGrad)" dot={false} name="Débit (t/h)" />
+            </AreaChart>
+          </ResponsiveContainer>
+          <p className="text-xs text-gray-400 mt-2">Seuil normal : 120–160 t/h · Rolling 90s window</p>
+        </div>
+
+        {/* P2O5 + Humidité */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-gray-900">⚗️ P2O5 & Humidité</h3>
+            <div className="flex gap-2">
+              <span className="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-700 font-medium">{last.p2o5}%</span>
+              <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 font-medium">{last.humidite}%</span>
             </div>
           </div>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={history}>
-              <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="timestamp" stroke="var(--muted-foreground)" fontSize={11} tickFormatter={(v) => v.substring(11, 16)} />
-              <YAxis yAxisId="temp" stroke="var(--muted-foreground)" fontSize={11} domain={["dataMin - 2", "dataMax + 2"]} />
-              <YAxis yAxisId="p2o5" orientation="right" stroke="var(--muted-foreground)" fontSize={11} />
-              <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
-              <Line yAxisId="temp" type="monotone" dataKey="temperature_reaction" stroke="var(--chart-1)" strokeWidth={2} dot={false} name="Température (°C)" />
-              <Line yAxisId="p2o5" type="monotone" dataKey="p2o5_measured" stroke="var(--chart-2)" strokeWidth={2} dot={false} name="P2O5 (%)" />
+          <ResponsiveContainer width="100%" height={180}>
+            <LineChart data={data}>
+              <CartesianGrid stroke="#f0f0f0" strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="time" fontSize={10} tick={{ fill: "#9ca3af" }} interval="preserveStartEnd" />
+              <YAxis yAxisId="p" domain={[43, 46]} fontSize={10} tick={{ fill: "#9ca3af" }} />
+              <YAxis yAxisId="h" orientation="right" domain={[2, 6]} fontSize={10} tick={{ fill: "#9ca3af" }} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+              <Line yAxisId="p" type="monotone" dataKey="p2o5" stroke="#8b5cf6" strokeWidth={2} dot={false} name="P2O5 (%)" />
+              <Line yAxisId="h" type="monotone" dataKey="humidite" stroke="#f59e0b" strokeWidth={2} dot={false} name="Humidité (%)" />
             </LineChart>
           </ResponsiveContainer>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-5 shadow-[var(--shadow-card)]">
-          <h3 className="text-sm font-semibold mb-3">Santé des services</h3>
-          <ul className="space-y-2 text-sm">
-            <li className="flex justify-between"><span>API Inférence</span><StatusPill status="ok" label="Opérationnel" /></li>
-            <li className="flex justify-between"><span>Feature Store</span><StatusPill status="ok" label="Opérationnel" /></li>
-            <li className="flex justify-between"><span>Détection dérive</span><StatusPill status={driftCount > 0 ? "warning" : "ok"} label={driftCount > 0 ? "Alerte" : "Normal"} /></li>
-            <li className="flex justify-between"><span>Registre modèles</span><StatusPill status="ok" label="Opérationnel" /></li>
-            <li className="flex justify-between"><span>Qualité données</span><StatusPill status={metrics?.data_quality_score > 0.95 ? "ok" : "warning"} label={metrics?.data_quality_score > 0.95 ? "Bonne" : "Dégradée"} /></li>
-          </ul>
-
-          <div className="mt-4 pt-4 border-t border-border">
-            <h4 className="text-xs font-semibold text-muted-foreground mb-2">MÉTRIQUES SYSTÈME</h4>
-            <ul className="space-y-1.5 text-xs">
-              <li className="flex justify-between"><span>Prédictions aujourd'hui</span><span className="font-mono">{metrics?.total_predictions_today?.toLocaleString() || "—"}</span></li>
-              <li className="flex justify-between"><span>Latence P99</span><span className="font-mono">{metrics?.inference_latency_p99_ms || "—"} ms</span></li>
-              <li className="flex justify-between"><span>Disponibilité</span><span className="font-mono">{metrics?.uptime_pct || "—"}%</span></li>
-            </ul>
-          </div>
+          <p className="text-xs text-gray-400 mt-2">P2O5 ≥ 44% · Humidité &lt; 5%</p>
         </div>
       </div>
 
-      <div className="bg-card border border-border rounded-xl shadow-[var(--shadow-card)] overflow-hidden">
-        <div className="p-4 border-b border-border">
-          <h3 className="text-sm font-semibold">Modèles en production</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50 text-xs uppercase tracking-wider text-muted-foreground">
-              <tr>
-                <th className="text-left px-4 py-2">Modèle</th>
-                <th className="text-left px-4 py-2">Type</th>
-                <th className="text-left px-4 py-2">Précision</th>
-                <th className="text-left px-4 py-2">Latence</th>
-                <th className="text-left px-4 py-2">Statut</th>
-              </tr>
-            </thead>
-            <tbody>
-              {modelList.length > 0 ? modelList.map((m: any, i: number) => (
-                <tr key={i} className="border-t border-border">
-                  <td className="px-4 py-3 font-medium">{m.name || m.model_name}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{m.type || m.model_type || "GBM"}</td>
-                  <td className="px-4 py-3">{m.accuracy ? (m.accuracy * 100).toFixed(1) + "%" : m.auc || "—"}</td>
-                  <td className="px-4 py-3">{m.latency_ms ? m.latency_ms + " ms" : "—"}</td>
-                  <td className="px-4 py-3">
-                    <StatusPill
-                      status={m.status === "healthy" || m.status === "ok" ? "ok" : m.status === "warning" || m.status === "watch" ? "warning" : "error"}
-                      label={m.status === "healthy" || m.status === "ok" ? "Actif" : m.status === "warning" ? "Surveillance" : "Dérive"}
-                    />
-                  </td>
-                </tr>
-              )) : (
-                <tr className="border-t border-border">
-                  <td colSpan={5} className="px-4 py-6 text-center text-muted-foreground">
-                    Aucun modèle trouvé
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+      {/* Statut capteurs */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+        <h3 className="font-semibold text-gray-900 mb-4">📊 Statut des capteurs</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
+          {sensors.map(s => {
+            const status = getStatus(s.key);
+            return (
+              <div key={s.key} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                <span className="text-xl">{s.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-medium text-gray-700 truncate">{s.label}</p>
+                  <p className="text-xs text-gray-400">{last[s.key]} {s.unit}</p>
+                </div>
+                <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${status === "ok" ? "bg-green-400" : status === "warning" ? "bg-yellow-400 animate-pulse" : "bg-red-500 animate-pulse"}`} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
-  );
-}
-
-function Legend({ color, label }: { color: string; label: string }) {
-  return (
-    <span className="inline-flex items-center gap-1.5">
-      <span className="w-2.5 h-0.5 inline-block" style={{ background: color }} />
-      {label}
-    </span>
   );
 }

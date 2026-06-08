@@ -62,12 +62,12 @@ export function canAccess(role: Role, path: string): boolean {
   // Page → allowed roles map
   const map: Record<string, Role[]> = {
     "/app/dashboard": ["operator", "engineer", "scientist", "itops", "management"],
-    "/app/analyse": ["operator", "engineer", "scientist", "itops", "management"],
-    
+  
+  
     "/app/alerts": ["operator", "engineer", "scientist", "itops", "management"],
     "/app/recommendations": ["operator", "engineer", "scientist", "management"],
     "/app/explain": ["engineer", "scientist", "management"],
-    "/app/monitoring": ["scientist", "itops"],
+    "/app/monitoring": ["operator", "engineer", "scientist", "itops", "management"],
     "/app/admin": ["itops"],
     "/app/management": ["management"],
     "/app/feedback": ["operator", "engineer", "scientist", "itops", "management"],
