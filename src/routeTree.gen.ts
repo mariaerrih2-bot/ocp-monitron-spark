@@ -12,13 +12,34 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppValidationRouteImport } from './routes/app.validation'
+import { Route as AppSimulationRouteImport } from './routes/app.simulation'
+import { Route as AppShapRouteImport } from './routes/app.shap'
+import { Route as AppSecuriteRouteImport } from './routes/app.securite'
 import { Route as AppRecommendationsRouteImport } from './routes/app.recommendations'
+import { Route as AppRapportsRouteImport } from './routes/app.rapports'
 import { Route as AppProcessKnowledgeRouteImport } from './routes/app.process-knowledge'
+import { Route as AppPipelinesRouteImport } from './routes/app.pipelines'
+import { Route as AppPerformanceRouteImport } from './routes/app.performance'
 import { Route as AppMonitoringRouteImport } from './routes/app.monitoring'
-import { Route as AppManagementRouteImport } from './routes/app.management'
+import { Route as AppModelesRouteImport } from './routes/app.modeles'
+import { Route as AppLogsRouteImport } from './routes/app.logs'
+import { Route as AppLignesRouteImport } from './routes/app.lignes'
+import { Route as AppKpisRouteImport } from './routes/app.kpis'
+import { Route as AppInsightsRouteImport } from './routes/app.insights'
+import { Route as AppHistoriqueRouteImport } from './routes/app.historique'
 import { Route as AppFeedbackRouteImport } from './routes/app.feedback'
+import { Route as AppFeaturestoreRouteImport } from './routes/app.featurestore'
 import { Route as AppExplainRouteImport } from './routes/app.explain'
+import { Route as AppEntrainementRouteImport } from './routes/app.entrainement'
+import { Route as AppDriftRouteImport } from './routes/app.drift'
+import { Route as AppDonneesRouteImport } from './routes/app.donnees'
+import { Route as AppDiagnosticRouteImport } from './routes/app.diagnostic'
+import { Route as AppDeriveRouteImport } from './routes/app.derive'
+import { Route as AppDeploiementRouteImport } from './routes/app.deploiement'
 import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
+import { Route as AppConfigurationRouteImport } from './routes/app.configuration'
+import { Route as AppArchitectureRouteImport } from './routes/app.architecture'
 import { Route as AppAnalyseRouteImport } from './routes/app.analyse'
 import { Route as AppAlertsRouteImport } from './routes/app.alerts'
 import { Route as AppAdminRouteImport } from './routes/app.admin'
@@ -38,9 +59,34 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppValidationRoute = AppValidationRouteImport.update({
+  id: '/validation',
+  path: '/validation',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSimulationRoute = AppSimulationRouteImport.update({
+  id: '/simulation',
+  path: '/simulation',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShapRoute = AppShapRouteImport.update({
+  id: '/shap',
+  path: '/shap',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSecuriteRoute = AppSecuriteRouteImport.update({
+  id: '/securite',
+  path: '/securite',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppRecommendationsRoute = AppRecommendationsRouteImport.update({
   id: '/recommendations',
   path: '/recommendations',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRapportsRoute = AppRapportsRouteImport.update({
+  id: '/rapports',
+  path: '/rapports',
   getParentRoute: () => AppRoute,
 } as any)
 const AppProcessKnowledgeRoute = AppProcessKnowledgeRouteImport.update({
@@ -48,14 +94,49 @@ const AppProcessKnowledgeRoute = AppProcessKnowledgeRouteImport.update({
   path: '/process-knowledge',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPipelinesRoute = AppPipelinesRouteImport.update({
+  id: '/pipelines',
+  path: '/pipelines',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPerformanceRoute = AppPerformanceRouteImport.update({
+  id: '/performance',
+  path: '/performance',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMonitoringRoute = AppMonitoringRouteImport.update({
   id: '/monitoring',
   path: '/monitoring',
   getParentRoute: () => AppRoute,
 } as any)
-const AppManagementRoute = AppManagementRouteImport.update({
-  id: '/management',
-  path: '/management',
+const AppModelesRoute = AppModelesRouteImport.update({
+  id: '/modeles',
+  path: '/modeles',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLogsRoute = AppLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLignesRoute = AppLignesRouteImport.update({
+  id: '/lignes',
+  path: '/lignes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppKpisRoute = AppKpisRouteImport.update({
+  id: '/kpis',
+  path: '/kpis',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInsightsRoute = AppInsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHistoriqueRoute = AppHistoriqueRouteImport.update({
+  id: '/historique',
+  path: '/historique',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFeedbackRoute = AppFeedbackRouteImport.update({
@@ -63,14 +144,59 @@ const AppFeedbackRoute = AppFeedbackRouteImport.update({
   path: '/feedback',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFeaturestoreRoute = AppFeaturestoreRouteImport.update({
+  id: '/featurestore',
+  path: '/featurestore',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppExplainRoute = AppExplainRouteImport.update({
   id: '/explain',
   path: '/explain',
   getParentRoute: () => AppRoute,
 } as any)
+const AppEntrainementRoute = AppEntrainementRouteImport.update({
+  id: '/entrainement',
+  path: '/entrainement',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDriftRoute = AppDriftRouteImport.update({
+  id: '/drift',
+  path: '/drift',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDonneesRoute = AppDonneesRouteImport.update({
+  id: '/donnees',
+  path: '/donnees',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDiagnosticRoute = AppDiagnosticRouteImport.update({
+  id: '/diagnostic',
+  path: '/diagnostic',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDeriveRoute = AppDeriveRouteImport.update({
+  id: '/derive',
+  path: '/derive',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDeploiementRoute = AppDeploiementRouteImport.update({
+  id: '/deploiement',
+  path: '/deploiement',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppConfigurationRoute = AppConfigurationRouteImport.update({
+  id: '/configuration',
+  path: '/configuration',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppArchitectureRoute = AppArchitectureRouteImport.update({
+  id: '/architecture',
+  path: '/architecture',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAnalyseRoute = AppAnalyseRouteImport.update({
@@ -96,13 +222,34 @@ export interface FileRoutesByFullPath {
   '/app/admin': typeof AppAdminRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/analyse': typeof AppAnalyseRoute
+  '/app/architecture': typeof AppArchitectureRoute
+  '/app/configuration': typeof AppConfigurationRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/deploiement': typeof AppDeploiementRoute
+  '/app/derive': typeof AppDeriveRoute
+  '/app/diagnostic': typeof AppDiagnosticRoute
+  '/app/donnees': typeof AppDonneesRoute
+  '/app/drift': typeof AppDriftRoute
+  '/app/entrainement': typeof AppEntrainementRoute
   '/app/explain': typeof AppExplainRoute
+  '/app/featurestore': typeof AppFeaturestoreRoute
   '/app/feedback': typeof AppFeedbackRoute
-  '/app/management': typeof AppManagementRoute
+  '/app/historique': typeof AppHistoriqueRoute
+  '/app/insights': typeof AppInsightsRoute
+  '/app/kpis': typeof AppKpisRoute
+  '/app/lignes': typeof AppLignesRoute
+  '/app/logs': typeof AppLogsRoute
+  '/app/modeles': typeof AppModelesRoute
   '/app/monitoring': typeof AppMonitoringRoute
+  '/app/performance': typeof AppPerformanceRoute
+  '/app/pipelines': typeof AppPipelinesRoute
   '/app/process-knowledge': typeof AppProcessKnowledgeRoute
+  '/app/rapports': typeof AppRapportsRoute
   '/app/recommendations': typeof AppRecommendationsRoute
+  '/app/securite': typeof AppSecuriteRoute
+  '/app/shap': typeof AppShapRoute
+  '/app/simulation': typeof AppSimulationRoute
+  '/app/validation': typeof AppValidationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -111,13 +258,34 @@ export interface FileRoutesByTo {
   '/app/admin': typeof AppAdminRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/analyse': typeof AppAnalyseRoute
+  '/app/architecture': typeof AppArchitectureRoute
+  '/app/configuration': typeof AppConfigurationRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/deploiement': typeof AppDeploiementRoute
+  '/app/derive': typeof AppDeriveRoute
+  '/app/diagnostic': typeof AppDiagnosticRoute
+  '/app/donnees': typeof AppDonneesRoute
+  '/app/drift': typeof AppDriftRoute
+  '/app/entrainement': typeof AppEntrainementRoute
   '/app/explain': typeof AppExplainRoute
+  '/app/featurestore': typeof AppFeaturestoreRoute
   '/app/feedback': typeof AppFeedbackRoute
-  '/app/management': typeof AppManagementRoute
+  '/app/historique': typeof AppHistoriqueRoute
+  '/app/insights': typeof AppInsightsRoute
+  '/app/kpis': typeof AppKpisRoute
+  '/app/lignes': typeof AppLignesRoute
+  '/app/logs': typeof AppLogsRoute
+  '/app/modeles': typeof AppModelesRoute
   '/app/monitoring': typeof AppMonitoringRoute
+  '/app/performance': typeof AppPerformanceRoute
+  '/app/pipelines': typeof AppPipelinesRoute
   '/app/process-knowledge': typeof AppProcessKnowledgeRoute
+  '/app/rapports': typeof AppRapportsRoute
   '/app/recommendations': typeof AppRecommendationsRoute
+  '/app/securite': typeof AppSecuriteRoute
+  '/app/shap': typeof AppShapRoute
+  '/app/simulation': typeof AppSimulationRoute
+  '/app/validation': typeof AppValidationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -127,13 +295,34 @@ export interface FileRoutesById {
   '/app/admin': typeof AppAdminRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/analyse': typeof AppAnalyseRoute
+  '/app/architecture': typeof AppArchitectureRoute
+  '/app/configuration': typeof AppConfigurationRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/deploiement': typeof AppDeploiementRoute
+  '/app/derive': typeof AppDeriveRoute
+  '/app/diagnostic': typeof AppDiagnosticRoute
+  '/app/donnees': typeof AppDonneesRoute
+  '/app/drift': typeof AppDriftRoute
+  '/app/entrainement': typeof AppEntrainementRoute
   '/app/explain': typeof AppExplainRoute
+  '/app/featurestore': typeof AppFeaturestoreRoute
   '/app/feedback': typeof AppFeedbackRoute
-  '/app/management': typeof AppManagementRoute
+  '/app/historique': typeof AppHistoriqueRoute
+  '/app/insights': typeof AppInsightsRoute
+  '/app/kpis': typeof AppKpisRoute
+  '/app/lignes': typeof AppLignesRoute
+  '/app/logs': typeof AppLogsRoute
+  '/app/modeles': typeof AppModelesRoute
   '/app/monitoring': typeof AppMonitoringRoute
+  '/app/performance': typeof AppPerformanceRoute
+  '/app/pipelines': typeof AppPipelinesRoute
   '/app/process-knowledge': typeof AppProcessKnowledgeRoute
+  '/app/rapports': typeof AppRapportsRoute
   '/app/recommendations': typeof AppRecommendationsRoute
+  '/app/securite': typeof AppSecuriteRoute
+  '/app/shap': typeof AppShapRoute
+  '/app/simulation': typeof AppSimulationRoute
+  '/app/validation': typeof AppValidationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -144,13 +333,34 @@ export interface FileRouteTypes {
     | '/app/admin'
     | '/app/alerts'
     | '/app/analyse'
+    | '/app/architecture'
+    | '/app/configuration'
     | '/app/dashboard'
+    | '/app/deploiement'
+    | '/app/derive'
+    | '/app/diagnostic'
+    | '/app/donnees'
+    | '/app/drift'
+    | '/app/entrainement'
     | '/app/explain'
+    | '/app/featurestore'
     | '/app/feedback'
-    | '/app/management'
+    | '/app/historique'
+    | '/app/insights'
+    | '/app/kpis'
+    | '/app/lignes'
+    | '/app/logs'
+    | '/app/modeles'
     | '/app/monitoring'
+    | '/app/performance'
+    | '/app/pipelines'
     | '/app/process-knowledge'
+    | '/app/rapports'
     | '/app/recommendations'
+    | '/app/securite'
+    | '/app/shap'
+    | '/app/simulation'
+    | '/app/validation'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -159,13 +369,34 @@ export interface FileRouteTypes {
     | '/app/admin'
     | '/app/alerts'
     | '/app/analyse'
+    | '/app/architecture'
+    | '/app/configuration'
     | '/app/dashboard'
+    | '/app/deploiement'
+    | '/app/derive'
+    | '/app/diagnostic'
+    | '/app/donnees'
+    | '/app/drift'
+    | '/app/entrainement'
     | '/app/explain'
+    | '/app/featurestore'
     | '/app/feedback'
-    | '/app/management'
+    | '/app/historique'
+    | '/app/insights'
+    | '/app/kpis'
+    | '/app/lignes'
+    | '/app/logs'
+    | '/app/modeles'
     | '/app/monitoring'
+    | '/app/performance'
+    | '/app/pipelines'
     | '/app/process-knowledge'
+    | '/app/rapports'
     | '/app/recommendations'
+    | '/app/securite'
+    | '/app/shap'
+    | '/app/simulation'
+    | '/app/validation'
   id:
     | '__root__'
     | '/'
@@ -174,13 +405,34 @@ export interface FileRouteTypes {
     | '/app/admin'
     | '/app/alerts'
     | '/app/analyse'
+    | '/app/architecture'
+    | '/app/configuration'
     | '/app/dashboard'
+    | '/app/deploiement'
+    | '/app/derive'
+    | '/app/diagnostic'
+    | '/app/donnees'
+    | '/app/drift'
+    | '/app/entrainement'
     | '/app/explain'
+    | '/app/featurestore'
     | '/app/feedback'
-    | '/app/management'
+    | '/app/historique'
+    | '/app/insights'
+    | '/app/kpis'
+    | '/app/lignes'
+    | '/app/logs'
+    | '/app/modeles'
     | '/app/monitoring'
+    | '/app/performance'
+    | '/app/pipelines'
     | '/app/process-knowledge'
+    | '/app/rapports'
     | '/app/recommendations'
+    | '/app/securite'
+    | '/app/shap'
+    | '/app/simulation'
+    | '/app/validation'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -212,11 +464,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/validation': {
+      id: '/app/validation'
+      path: '/validation'
+      fullPath: '/app/validation'
+      preLoaderRoute: typeof AppValidationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/simulation': {
+      id: '/app/simulation'
+      path: '/simulation'
+      fullPath: '/app/simulation'
+      preLoaderRoute: typeof AppSimulationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/shap': {
+      id: '/app/shap'
+      path: '/shap'
+      fullPath: '/app/shap'
+      preLoaderRoute: typeof AppShapRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/securite': {
+      id: '/app/securite'
+      path: '/securite'
+      fullPath: '/app/securite'
+      preLoaderRoute: typeof AppSecuriteRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/recommendations': {
       id: '/app/recommendations'
       path: '/recommendations'
       fullPath: '/app/recommendations'
       preLoaderRoute: typeof AppRecommendationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/rapports': {
+      id: '/app/rapports'
+      path: '/rapports'
+      fullPath: '/app/rapports'
+      preLoaderRoute: typeof AppRapportsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/process-knowledge': {
@@ -226,6 +513,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProcessKnowledgeRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/pipelines': {
+      id: '/app/pipelines'
+      path: '/pipelines'
+      fullPath: '/app/pipelines'
+      preLoaderRoute: typeof AppPipelinesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/performance': {
+      id: '/app/performance'
+      path: '/performance'
+      fullPath: '/app/performance'
+      preLoaderRoute: typeof AppPerformanceRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/monitoring': {
       id: '/app/monitoring'
       path: '/monitoring'
@@ -233,11 +534,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMonitoringRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/management': {
-      id: '/app/management'
-      path: '/management'
-      fullPath: '/app/management'
-      preLoaderRoute: typeof AppManagementRouteImport
+    '/app/modeles': {
+      id: '/app/modeles'
+      path: '/modeles'
+      fullPath: '/app/modeles'
+      preLoaderRoute: typeof AppModelesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/logs': {
+      id: '/app/logs'
+      path: '/logs'
+      fullPath: '/app/logs'
+      preLoaderRoute: typeof AppLogsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/lignes': {
+      id: '/app/lignes'
+      path: '/lignes'
+      fullPath: '/app/lignes'
+      preLoaderRoute: typeof AppLignesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/kpis': {
+      id: '/app/kpis'
+      path: '/kpis'
+      fullPath: '/app/kpis'
+      preLoaderRoute: typeof AppKpisRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/insights': {
+      id: '/app/insights'
+      path: '/insights'
+      fullPath: '/app/insights'
+      preLoaderRoute: typeof AppInsightsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/historique': {
+      id: '/app/historique'
+      path: '/historique'
+      fullPath: '/app/historique'
+      preLoaderRoute: typeof AppHistoriqueRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/feedback': {
@@ -247,6 +583,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFeedbackRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/featurestore': {
+      id: '/app/featurestore'
+      path: '/featurestore'
+      fullPath: '/app/featurestore'
+      preLoaderRoute: typeof AppFeaturestoreRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/explain': {
       id: '/app/explain'
       path: '/explain'
@@ -254,11 +597,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppExplainRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/entrainement': {
+      id: '/app/entrainement'
+      path: '/entrainement'
+      fullPath: '/app/entrainement'
+      preLoaderRoute: typeof AppEntrainementRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/drift': {
+      id: '/app/drift'
+      path: '/drift'
+      fullPath: '/app/drift'
+      preLoaderRoute: typeof AppDriftRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/donnees': {
+      id: '/app/donnees'
+      path: '/donnees'
+      fullPath: '/app/donnees'
+      preLoaderRoute: typeof AppDonneesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/diagnostic': {
+      id: '/app/diagnostic'
+      path: '/diagnostic'
+      fullPath: '/app/diagnostic'
+      preLoaderRoute: typeof AppDiagnosticRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/derive': {
+      id: '/app/derive'
+      path: '/derive'
+      fullPath: '/app/derive'
+      preLoaderRoute: typeof AppDeriveRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/deploiement': {
+      id: '/app/deploiement'
+      path: '/deploiement'
+      fullPath: '/app/deploiement'
+      preLoaderRoute: typeof AppDeploiementRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/dashboard': {
       id: '/app/dashboard'
       path: '/dashboard'
       fullPath: '/app/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/configuration': {
+      id: '/app/configuration'
+      path: '/configuration'
+      fullPath: '/app/configuration'
+      preLoaderRoute: typeof AppConfigurationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/architecture': {
+      id: '/app/architecture'
+      path: '/architecture'
+      fullPath: '/app/architecture'
+      preLoaderRoute: typeof AppArchitectureRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/analyse': {
@@ -289,26 +688,68 @@ interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRoute
   AppAlertsRoute: typeof AppAlertsRoute
   AppAnalyseRoute: typeof AppAnalyseRoute
+  AppArchitectureRoute: typeof AppArchitectureRoute
+  AppConfigurationRoute: typeof AppConfigurationRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppDeploiementRoute: typeof AppDeploiementRoute
+  AppDeriveRoute: typeof AppDeriveRoute
+  AppDiagnosticRoute: typeof AppDiagnosticRoute
+  AppDonneesRoute: typeof AppDonneesRoute
+  AppDriftRoute: typeof AppDriftRoute
+  AppEntrainementRoute: typeof AppEntrainementRoute
   AppExplainRoute: typeof AppExplainRoute
+  AppFeaturestoreRoute: typeof AppFeaturestoreRoute
   AppFeedbackRoute: typeof AppFeedbackRoute
-  AppManagementRoute: typeof AppManagementRoute
+  AppHistoriqueRoute: typeof AppHistoriqueRoute
+  AppInsightsRoute: typeof AppInsightsRoute
+  AppKpisRoute: typeof AppKpisRoute
+  AppLignesRoute: typeof AppLignesRoute
+  AppLogsRoute: typeof AppLogsRoute
+  AppModelesRoute: typeof AppModelesRoute
   AppMonitoringRoute: typeof AppMonitoringRoute
+  AppPerformanceRoute: typeof AppPerformanceRoute
+  AppPipelinesRoute: typeof AppPipelinesRoute
   AppProcessKnowledgeRoute: typeof AppProcessKnowledgeRoute
+  AppRapportsRoute: typeof AppRapportsRoute
   AppRecommendationsRoute: typeof AppRecommendationsRoute
+  AppSecuriteRoute: typeof AppSecuriteRoute
+  AppShapRoute: typeof AppShapRoute
+  AppSimulationRoute: typeof AppSimulationRoute
+  AppValidationRoute: typeof AppValidationRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRoute,
   AppAlertsRoute: AppAlertsRoute,
   AppAnalyseRoute: AppAnalyseRoute,
+  AppArchitectureRoute: AppArchitectureRoute,
+  AppConfigurationRoute: AppConfigurationRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppDeploiementRoute: AppDeploiementRoute,
+  AppDeriveRoute: AppDeriveRoute,
+  AppDiagnosticRoute: AppDiagnosticRoute,
+  AppDonneesRoute: AppDonneesRoute,
+  AppDriftRoute: AppDriftRoute,
+  AppEntrainementRoute: AppEntrainementRoute,
   AppExplainRoute: AppExplainRoute,
+  AppFeaturestoreRoute: AppFeaturestoreRoute,
   AppFeedbackRoute: AppFeedbackRoute,
-  AppManagementRoute: AppManagementRoute,
+  AppHistoriqueRoute: AppHistoriqueRoute,
+  AppInsightsRoute: AppInsightsRoute,
+  AppKpisRoute: AppKpisRoute,
+  AppLignesRoute: AppLignesRoute,
+  AppLogsRoute: AppLogsRoute,
+  AppModelesRoute: AppModelesRoute,
   AppMonitoringRoute: AppMonitoringRoute,
+  AppPerformanceRoute: AppPerformanceRoute,
+  AppPipelinesRoute: AppPipelinesRoute,
   AppProcessKnowledgeRoute: AppProcessKnowledgeRoute,
+  AppRapportsRoute: AppRapportsRoute,
   AppRecommendationsRoute: AppRecommendationsRoute,
+  AppSecuriteRoute: AppSecuriteRoute,
+  AppShapRoute: AppShapRoute,
+  AppSimulationRoute: AppSimulationRoute,
+  AppValidationRoute: AppValidationRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

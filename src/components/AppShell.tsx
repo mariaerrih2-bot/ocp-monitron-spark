@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   X,
+  FileText,
 } from "lucide-react";
 import { getCurrentUser, logout, ROLE_LABELS, canAccess, type Role } from "@/lib/auth";
 import ocpLogo from "@/assets/ocp-logo.png";
@@ -26,13 +27,32 @@ interface NavItem {
 
 const ALL_NAV: NavItem[] = [
   { to: "/app/dashboard", label: "Tableau de bord", icon: LayoutDashboard },
-  { to: "/app/analyse", label: "Analyse", icon: BarChart3 },
   { to: "/app/alerts", label: "Alertes", icon: Bell },
   { to: "/app/recommendations", label: "Recommandations", icon: Lightbulb },
+  { to: "/app/shap" as any, label: "Analyse SHAP", icon: Brain },
+  { to: "/app/validation" as any, label: "Validation des actions", icon: Brain },
+  { to: "/app/derive" as any, label: "Dérive du modèle", icon: Activity },
+  { to: "/app/historique" as any, label: "Comparaison historique", icon: BarChart3 },
   { to: "/app/explain", label: "Explication IA", icon: Brain },
+  { to: "/app/simulation" as any, label: "Simulation", icon: Activity },
+  { to: "/app/diagnostic" as any, label: "Diagnostic avancé", icon: Activity },
   { to: "/app/monitoring", label: "Monitoring temps réel", icon: Activity },
-  { to: "/app/admin", label: "Système / Admin", icon: Server },
-  { to: "/app/management", label: "Management", icon: TrendingUp },
+  { to: "/app/pipelines" as any, label: "Pipelines data", icon: Activity },
+  { to: "/app/logs" as any, label: "Logs", icon: FileText },
+  { to: "/app/deploiement" as any, label: "Déploiement", icon: Server },
+  { to: "/app/securite" as any, label: "Sécurité", icon: Server },
+  { to: "/app/configuration" as any, label: "Configuration système", icon: Server },
+  { to: "/app/drift" as any, label: "Drift Monitoring", icon: Activity },
+  { to: "/app/featurestore" as any, label: "Feature Store", icon: Activity },
+  { to: "/app/entrainement" as any, label: "Entraînement", icon: Activity },
+  { to: "/app/modeles" as any, label: "Comparaison modèles", icon: Activity },
+  { to: "/app/donnees" as any, label: "Données & Audit ML", icon: Activity },
+  { to: "/app/architecture" as any, label: "Architecture", icon: Activity },
+  { to: "/app/performance" as any, label: "Performance", icon: BarChart3 },
+  { to: "/app/lignes" as any, label: "Lignes & procédés", icon: Activity },
+  { to: "/app/insights" as any, label: "Insights IA", icon: Sparkles },
+  { to: "/app/rapports" as any, label: "Rapports & Exports", icon: MessageSquare },
+  { to: "/app/kpis" as any, label: "KPIs exécutifs", icon: TrendingUp },
   { to: "/app/feedback", label: "Retour opérateur", icon: MessageSquare },
 ];
 export function AppShell({ children }: { children: React.ReactNode }) {

@@ -21,7 +21,7 @@ export const ROLE_HOMES: Record<Role, string> = {
   operator: "/app/dashboard",
   engineer: "/app/recommendations",
   scientist: "/app/monitoring",
-  itops: "/app/admin",
+  itops: "/app/pipelines",
   management: "/app/management",
 };
 
@@ -29,7 +29,7 @@ export const ROLE_HOMES: Record<Role, string> = {
 export const DEMO_ACCOUNTS: Array<{ email: string; role: Role; name: string }> = [
   { email: "operator@ocp.ma", role: "operator", name: "Yassine Operator" },
   { email: "engineer@ocp.ma", role: "engineer", name: "Sara El Idrissi" },
-  { email: "scientist@ocp.ma", role: "scientist", name: "Karim Benali" },
+  { email: "scientist@ocp.ma", role: "scientist", name: "Errih Maria" },
   { email: "itops@ocp.ma", role: "itops", name: "Mohammed Tazi" },
   { email: "management@ocp.ma", role: "management", name: "Leila Amrani" },
 ];
@@ -61,15 +61,35 @@ export function logout(): void {
 export function canAccess(role: Role, path: string): boolean {
   // Page → allowed roles map
   const map: Record<string, Role[]> = {
-    "/app/dashboard": ["operator", "engineer", "scientist", "itops", "management"],
-  
-  
-    "/app/alerts": ["operator", "engineer", "scientist", "itops", "management"],
-    "/app/recommendations": ["operator", "engineer", "scientist", "management"],
-    "/app/explain": ["engineer", "scientist", "management"],
-    "/app/monitoring": ["operator", "engineer", "scientist", "itops", "management"],
+    "/app/dashboard": ["operator", "engineer", "scientist"],
+    "/app/alerts": ["operator", "engineer"],
+    "/app/analyse": [],
+    "/app/recommendations": ["operator"],
+    "/app/explain": ["operator", "engineer", "scientist"],
+    "/app/diagnostic": ["engineer"],
+    "/app/shap": ["engineer"],
+    "/app/validation": ["engineer"],
+    "/app/derive": ["engineer", "scientist"],
+    "/app/historique": ["engineer"],
+    "/app/monitoring": ["operator"],
     "/app/admin": ["itops"],
-    "/app/management": ["management"],
+    "/app/pipelines": ["itops"],
+    "/app/logs": ["itops"],
+    "/app/deploiement": ["itops"],
+    "/app/securite": ["itops"],
+    "/app/configuration": ["itops"],
+    "/app/drift": ["scientist"],
+    "/app/simulation": ["operator", "engineer"],
+    "/app/performance": ["management"],
+    "/app/featurestore": ["scientist"],
+    "/app/entrainement": ["scientist"],
+    "/app/modeles": ["scientist"],
+    "/app/donnees": ["scientist", "itops"],
+    "/app/architecture": ["scientist", "itops"],
+    "/app/kpis": ["management"],
+    "/app/lignes": ["management"],
+    "/app/insights": ["management"],
+    "/app/rapports": ["management"],
     "/app/feedback": ["operator", "engineer", "scientist", "itops", "management"],
   };
   return map[path]?.includes(role) ?? true;
